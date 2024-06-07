@@ -1,5 +1,5 @@
+<!-- eslint-disable vue/require-v-for-key -->
 <template>
-
 
     <div  class="home">
 
@@ -20,11 +20,14 @@
     <div class="container">
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
-            <div class="col" v-for="i in 12" :key ="i">
-                <Card></Card>
+            <!--<div class="col" v-for="i in 12" :key ="i">
+                2024.06.07 첫 번째 방법 -> 2024.06.07 wingerms    
+            --> 
+            <div class="col" v-for="(item, idx) in state.items" v-bind:key ="idx" >
+                {{ item }}
+                <Card :item="item"></Card>
             </div>
-        
+         
         </div>
     </div>
     </div>
@@ -38,11 +41,35 @@
 </template>
 
 <script>
-
-import Card from '@/components/Card';
+import axios from 'axios';
+import { reactive } from 'vue';
+import Card from '@/components/Card'
 
 export default {
     name : 'Home',
-    components :{ Card }
+    components : {Card},
+    setup() {
+
+        const state = reactive({
+            items : []
+        })
+
+        /*axios.get("/api/items").then((res) => {
+            state.items = res.data; 2024.06.07 wingerms
+        })*/
+
+        
+        /* Line 55에 있는 res객체에서 바로 state.items에 담아줄 수 있는 값이다. */
+        axios.get("/api/items").then(({data}) => {
+            state.items = data;
+        })
+
+        return {state}
+
+    }
 }
 </script>
+
+
+
+
