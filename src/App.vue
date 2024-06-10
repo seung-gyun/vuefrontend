@@ -2,10 +2,10 @@
 
 <template>
   <Header></Header>
-  <div class="col" v-for="(item, idx) in state.items" v-bind:key ="idx" >
+  <!-- <div class="col" v-for="(item, idx) in state.items" v-bind:key ="idx" >
         {{ item }}
         <Card :item="item"></Card>
-    </div>  
+    </div>   -->
   <Home></Home>
   <Footer></Footer>
 </template>
