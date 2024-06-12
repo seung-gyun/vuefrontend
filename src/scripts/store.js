@@ -1,9 +1,9 @@
-import { createStore} from 'vuex'
+import { createStore } from 'vuex'
 
 const store = createStore({
     state(){
         return {
-            account:{
+            account: {
                 id : 0
             }
         }
