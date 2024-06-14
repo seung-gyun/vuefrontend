@@ -23,9 +23,7 @@ export default{
 
     const check = ()=>{
       axios.get("/api/account/check").then(({data})=>{
-        window.alert(data);
         console.log(data);
-        window.alert(data);
           store.commit("setAccount", data || 0);
 
       })

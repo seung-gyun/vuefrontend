@@ -5,7 +5,7 @@
         <div class="card-body">
             <p class = "card-text">{{item.NAME}}</p>
                 <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-primary">구입하기</button>                
+                <button class="fa fa-cart-plus" @click="addToCart(item.ID)" aria-hidden="true"></button>               
                 <small class="price text-muted">
                     {{ item.PRICE }} 원
                 </small>
@@ -22,10 +22,25 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name : 'Card',
     props:{
         item: Object
+    },
+    setup(props){
+        const addToCart = ()=> {
+
+            window.alert("test");
+
+            axios.get('api/cart/items/'+props.item.ID).then(()=> {
+                console.log('success')
+            })
+        };
+
+        return {addToCart};
+
     }
 }
 </script>
