@@ -32,8 +32,6 @@ export default {
     setup(props){
         const addToCart = ()=> {
 
-            window.alert("test");
-
             axios.get('api/cart/items/'+props.item.ID).then(()=> {
                 console.log('success')
             })
