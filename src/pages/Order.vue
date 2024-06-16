@@ -23,31 +23,31 @@
           </div>
           <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">주문자 정보</h4>
-            <form class="needs-validation" novalidate="">
+            <div class="needs-validation" novalidate="">
               <div class="row g-3">
-                <div class="col-12"><label for="username" class="form-label">이름</label>
-                  <div class="input-group has-validation"><input type="text" class="form-control" id="username" placeholder="Username" required="">
+                <div class="col-12"><label for="name" class="form-label">이름</label>
+                  <div class="input-group has-validation"><input type="text" class="form-control" id="name" v-model="state.form.name">
                   </div>
                 </div>
                 <div class="col-12"><label for="address" class="form-label">주소</label><input type="text"
-                    class="form-control" id="address" placeholder="1234 Main St" required="">
+                    class="form-control" id="address" v-model="state.form.address">
                 </div>
               </div>
               <hr class="my-4">
               <h4 class="mb-3">결제수단</h4>
               <div class="my-3">
-                <div class="form-check"><input id="credit" name="paymentMethod" type="radio" class="form-check-input"
-                    checked="" required=""><label class="form-check-label" for="credit">신용카드</label></div>
-                <div class="form-check"><input id="debit" name="paymentMethod" type="radio" class="form-check-input"
-                    required=""><label class="form-check-label" for="debit">무통장 입금</label></div>
+                <div class="form-check"><input id="card" name="paymentMethod" type="radio" class="form-check-input"
+                    value="card" v-model="state.form.payment"><label class="form-check-label" for="card">신용카드</label></div>
+                <div class="form-check"><input id="bank" name="paymentMethod" type="radio" class="form-check-input"
+                  value="bank" v-model="state.form.payment"><label class="form-check-label" for="bank">무통장 입금</label></div>
               </div>
               <div class="row gy-3">
-                <label for="cc-name" class="form-label">카드 번호</label><input type="text"
-                    class="form-control" id="cc-name" placeholder="" required="">
+                <label for="cardnumber" class="form-label">카드 번호</label><input type="text"
+                    class="form-control" id="cardnumber" v-model="state.form.cardnumber">
                   <div class="invalid-feedback"> Name on card is required </div>                
               </div>
-              <hr class="my-4"><button class="w-100 btn btn-primary btn-lg" type="submit">결제하기</button>
-            </form>
+              <hr class="my-4"><button class="w-100 btn btn-primary btn-lg" @click="submit()">결제하기</button>
+            </div>
           </div>
         </div>
       </main>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import router from '@/scripts/router';
 import axios from 'axios';
 import { computed, reactive } from 'vue';
 
@@ -63,7 +64,15 @@ export default {
   name: 'Login',
   setup() {
     const state = reactive({
-      items: []
+      items: [],
+      form:{
+        name:"",
+        address:"",
+        payment:"",
+        cardnumber:"",
+        items:"",
+
+      }
     })
 
     const load = () => {
@@ -71,6 +80,20 @@ export default {
       axios.get("api/cart/items").then(({ data }) => {
         console.log(data);
         state.items = data;
+      });
+
+    }
+
+    const submit =()=>{
+
+      const args = JSON.parse(JSON.stringify(state.form));
+      args.items = JSON.stringify(state.items);
+
+
+
+      axios.post("api/orders", args).then(() => {
+        alert("구입 완료하였습니다.");
+        router.push({path:"/orders"})
       });
 
     }
@@ -93,7 +116,7 @@ export default {
 
     load();
 
-    return { state , computedPrice };
+    return { state , computedPrice, submit };
 
   }
 }
